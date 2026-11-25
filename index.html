@@ -340,7 +340,6 @@ footer { background: #fff9ef; }
     <a href="#game" class="brand"><span class="pixel-heart filled" aria-hidden="true"></span>Our Little Journey</a>
     <div class="nav-links">
       <button type="button" class="text-button" id="timeline-toggle" aria-controls="journey" aria-expanded="false">Timeline</button>
-      <button type="button" class="text-button" id="export" data-editor>Download to share</button>
     </div>
   </nav>
 </header>
@@ -614,7 +613,7 @@ form.addEventListener('submit', async event => {
     try {
       localStorage.setItem(storageKey, JSON.stringify(next));
     } catch {
-      showStatus('This browser could not save the changes. Download a copy before closing the page.');
+      showStatus('This browser could not save the changes.');
     }
     moments = next;
     render();
@@ -626,24 +625,6 @@ form.addEventListener('submit', async event => {
     $('submit').disabled = false;
     $('cancel').disabled = false;
   }
-});
-
-$('export').addEventListener('click', () => {
-  const copy = document.documentElement.cloneNode(true);
-  copy.querySelector('#journey-data').textContent = JSON.stringify({ editable: false, moments }).replace(/</g, '\\u003c');
-  copy.querySelector('#timeline').replaceChildren();
-  copy.querySelector('#scene').replaceChildren();
-  copy.querySelector('#journey').hidden = true;
-  copy.querySelector('#moment-form').reset();
-  copy.querySelector('#editor').removeAttribute('open');
-  copy.querySelector('#status').hidden = true;
-  const file = new Blob(['<!doctype html>\n', copy.outerHTML], { type: 'text/html;charset=utf-8' });
-  const url = URL.createObjectURL(file);
-  const link = document.createElement('a');
-  link.href = url;
-  link.download = 'Our Little Journey for Bhoomika.html';
-  link.click();
-  setTimeout(() => URL.revokeObjectURL(url), 1000);
 });
 
 if (!source.editable) document.querySelectorAll('[data-editor]').forEach(control => control.hidden = true);
